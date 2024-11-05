@@ -13,133 +13,124 @@ Bu proje, aşağıdaki konuları öğrenmeye yardımcı olmak için tasarlanmı�
 
 
 ## İstenilen Görev
-Rastgele 10 adet sayıdan oluşan bir liste oluşturunuz. Bu liste üzerinden aşağıdaki linq sorgularını çalıştırarak konsol ekranına istenilenleri yazdırınız.
-1. Çift olan sayılar
-2. Tek olan sayılar
-3. Negatif sayılar
-4. Pozitif Sayılar
-5. 15'ten büyük ve 22'den küçük sayılar
-6. Listedeki her bir sayının karesi (Bunun için yeni bir liste oluşturup yazdırabilirsiniz.)
+![uWPkFJp-Patikafy](https://github.com/user-attachments/assets/1a170546-7551-4f9b-8f98-fb6efb40b66d)
+
+Yukarıda 11 sanatçımız için bir veri tablosu verilmiştir. Tablodaki her bir satır bir nesneye karşılık gelecek şekilde bu nesnelerden oluşan bir liste tanımlayınız. Ardından bu liste üzerinden aşığıdaki sorguları gerçekleştiriniz.
+1. Adı 'S' ile başlayan şarkıcılar
+2. Albüm satışları 10 milyon'un üzerinde olan şarkıcılar
+3. 2000 yılı öncesi çıkış yapmış ve pop müzik yapan şarkıcılar. ( Çıkış yıllarına göre gruplayarak, alfabetik bir sıra ile yazdırınız.
+4. En çok albüm satan şarkıcı
+5. En yeni çıkış yapan şarkıcı ve en eski çıkış yapan şarkıcı
+    
 
 
-## Kod Region 1
+## Kod: Singer Class'ı
 ```csharp
- static void Main(string[] args)
- {
-     #region UZUN UZUN YAZDIM :)
-     List<int> randomNumbers = new List<int>(); // random sayıları tutacağımız liste
-     Random random = new Random();   // random üretilecek sayı nesnesi
+public class Singer 
+{
+    public string NameSurname { get; set; }
+    public string MusicGenre { get; set; }
+    public int DebutYear { get; set; }
+    public double AlbumSales { get; set; }
 
-     for (int i = 0; i < 10; i++)  // 10 adet sayı için döngü
-     {
-         randomNumbers.Add(random.Next(-50, 51));  // negatif sayıları da kapsaması için -50 ile 50 arasında sayılar üret ve listeye ekle
-     }
+    public Singer(string nameSurname, string musicGenre, int debutYear, double aldumSales)
+    {
+        NameSurname = nameSurname;
+        MusicGenre = musicGenre;
+        DebutYear = debutYear;
+        AlbumSales = aldumSales;
+    }
 
-     Console.WriteLine("----- ÜRETİLEN SAYILAR -----");
-     foreach (var randomNumber in randomNumbers)  // üretilen sayıları foreach ile ekrana yazdır
-     {
-         Console.WriteLine(randomNumber);
-     }
-
-     Console.WriteLine("-----------------------------------------");
-
-     Console.WriteLine("----- ÇİFT SAYILAR -----");// Where ile filtreleme yapıyoruz
-     var evenNumbers = randomNumbers.Where(num => num % 2 == 0);  // randomNumbers listesindeki her sayıyı kontrol ederek ÇİFT sayıları seç.
-     foreach (var evenNumber in evenNumbers) // çift sayıları ekrana yazdır
-     {
-         Console.WriteLine(evenNumber);
-     }
-
-     Console.WriteLine("-----------------------------------------");
-
-     Console.WriteLine("----- TEK SAYILAR -----");// Where ile filtreleme yapıyoruz
-     var oddNumbers = randomNumbers.Where(num => num % 2 != 0); // randomNumbers listesindeki her sayıyı kontrol ederek TEK sayıları seç.
-     foreach (var oddNumber in oddNumbers)
-     {
-         Console.WriteLine(oddNumber);
-     }
-
-     Console.WriteLine("-----------------------------------------");
-
-     Console.WriteLine("----- NEGATİF SAYILAR -----"); // Where ile filtreleme yapıyoruz
-     var negativeNumbers = randomNumbers.Where(num => num < 0); // randomNumbers listesindeki her sayıyı kontrol ederek NEGATİF sayıları seç.
-     foreach (var negativeNumber in negativeNumbers)
-     {
-         Console.WriteLine(negativeNumber);
-     }
-
-     Console.WriteLine("-----------------------------------------");
-
-     Console.WriteLine("----- POZİTİF SAYILAR -----");// Where ile filtreleme yapıyoruz
-     var positiveNumbers = randomNumbers.Where(num => num > 0);// randomNumbers listesindeki her sayıyı kontrol ederek POZİTİF sayıları seç.
-     foreach (var positiveNumber in positiveNumbers)
-     {
-         Console.WriteLine(positiveNumber);
-     }
-
-     Console.WriteLine("-----------------------------------------");
-
-     Console.WriteLine("----- 15'DEN BÜYÜK 22'DEN KÜÇÜK -----");
-     var numbers = randomNumbers.Where(num => (num > 15) && (num < 22)); // Where ile filtrele neyi? 15 den büyük 22'den küçük sayıları
-     foreach (var number in numbers)
-     {
-         Console.WriteLine(number);
-     }
-
-     Console.WriteLine("-----------------------------------------");
-
-     Console.WriteLine("----- SAYILARIN KARESİ -----");
-     var squaredNumbers = randomNumbers.Select(num => num * num); // Select ile her bir sayının karesini alıyoruz ve hsaplıyoruz
-     foreach (var squaredNumber in squaredNumbers)
-     {
-         Console.WriteLine(squaredNumber);
-     }
+    public override string ToString()
+    {
+        // Sanatçının ad ve soyadını, müzik türünü, çıkış yılını ve albüm satışlarını belirli bir formatta döndürür.
+        // 'PadRight' metodu, yazdırma işlemi sırasında her bir değerin sağda hizalanmasını sağlar.
+        return $"{NameSurname.PadRight(20)} {MusicGenre.PadRight(30)} {DebutYear}         yaklaşık {AlbumSales} milyon";
+    }
 }
 ```
 
-## Kod Region 2
+## Kod: Main Class
 
 ```csharp
 static void Main(string[] args)
 {
-    List<int> randomNumbers2 = new List<int>(); // Lİste oluştur
-    Random random2 = new Random(); //Random sayı nesnesi
-    
-    for (int i = 0; i < 10; i++)  // 10 adet sayı üreteceğimiz döngü
+    // Sanatçı listesini oluşturduk ama nerdenn Singer Class'ından 
+    List<Singer> singers = new List<Singer>
     {
-        randomNumbers2.Add(random2.Next(-50, 51));  // Sayıları üret ve listeye ekle
-    }
-    Console.WriteLine("----- ÜRETİLEN SAYILAR -----");
-    randomNumbers2.ForEach(number => Console.WriteLine(number));  // her sayıyı ekrana yazdıracağımız ForEach methodu
-    
-    
-    Console.WriteLine("----- ÇİFT SAYILAR -----");
-    // randomNumbers2 listesindeki çift sayıları filtrelemek için Where metodunu kullanıyoruz
-    var evenNumbers2 = randomNumbers2.Where(num => num %2 == 0).ToList(); // Çift sayıları seçiyoruz ve listeye çeviriyoruz
-    evenNumbers2.ForEach(num => Console.WriteLine(num)); // Filtrelenmiş çift sayıları konsol ekranına yazdırmak için ForEach metodunu kullanıyoruz
-    
-    Console.WriteLine("----- TEK SAYILAR -----");
-    var oddNumbers2 = randomNumbers2.Where(num => num % 2 != 0).ToList();
-    oddNumbers2.ForEach(num => Console.WriteLine(num));
-    
-    Console.WriteLine("----- NEGATİF SAYILAR -----");
-    var negativeNumbers2 = randomNumbers2.Where(num => num < 0).ToList();
-    negativeNumbers2.ForEach(num => Console.WriteLine(num));
-    
-    Console.WriteLine("----- POZİTİF SAYILAR -----");
-    var positiveNumbers2 = randomNumbers2.Where(num => num > 0).ToList();
-    positiveNumbers2.ForEach(num => Console.WriteLine(num));
-    
-    Console.WriteLine("----- 15 İLE 22 ARASINDAKİ SAYILAR -----");
-    var filteredNumbers = randomNumbers2.Where(num => (num > 15) && (num < 22)).ToList();
-    filteredNumbers.ForEach(num => Console.WriteLine(num));
-    
-    Console.WriteLine("----- SAYILARIN KARESİ -----");
-    var squaredNumbers2 = randomNumbers2.Select(num => num * num).ToList();
-    squaredNumbers2.ForEach(num => Console.WriteLine(num));
+        new Singer("Ajda Pekkan","Pop",1968,20),
+        new Singer("Sezen Aksu","Türk Halk Müziği / Pop", 1971,10),
+        new Singer("Funda Arar", "Pop", 1999, 3),
+        new Singer("Sertab Erener", "Pop", 1994, 5),
+        new Singer("Sıla", "Pop", 2009, 3),
+        new Singer("Serdar Ortaç", "Pop", 1994, 10),
+        new Singer("Tarkan", "Pop", 1992, 40),
+        new Singer("Hande Yener", "Pop", 1999, 7),
+        new Singer("Hadise", "Pop", 2005, 5),
+        new Singer("Gülben Ergen", "Pop / Türk Halk Müziği", 1997, 10),
+        new Singer("Neşet Ertaş", "Türk Halk Müziği / Türk Sanat Müziği", 1960, 2)
+    };
+
+
+    // Adı S ile başlayan sanatçılar
+    Console.ForegroundColor = ConsoleColor.Green; // Yazı rengi değiştirme
+    Console.WriteLine("----- S ile Başlayan Sanatçı İsimleri -----");
+    Console.ResetColor();
+    var singersStartingWithS = singers.Where(singers => singers.NameSurname.StartsWith("S")).ToList(); // where ile filtreledik StartWitd kullan
+    singersStartingWithS.ForEach(singers => Console.WriteLine(singers)); // filtrelenen veriyi yazdırdık döngü ile
+
+
+    //Albüm satışları 10 Milyon'un üzerinde olan sanatçılar
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\r\n----- 10 Milyon'dan Fazla Albüm Satan Sanatçılar -----");
+    Console.ResetColor();
+    var singersWithHighSales = singers.Where(s => s.AlbumSales > 10).ToList(); // 'Where' yöntemi ile 10 milyonun üzerinde albüm satan sanatçıları filtreliyoruz.
+    singersWithHighSales.ForEach(singers => Console.WriteLine(singers));  // filtrelenen veriyi yazdırdık döngü ile
+
+
+    //2000 yılı öncesi çıkış yapmış ve pop müzik yapan şarkıcılar. ( Çıkış yıllarına göre gruplayarak, alfabetik bir sıralı.
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\r\n----- 2000 Yılından Önce Çıkmış Pop Sanatçıları -----");
+    Console.ResetColor();
+    /*
+     * 'Where' yöntemi ile 2000 yılından önce çıkış yapan ve pop müzik yapan sanatçıları filtreliyoruz.
+     * 'OrderBy' yöntemi, filtrelenmiş sonuçları çıkış yılına göre artan sırada sıralar.
+     * 'ThenBy' yöntemi, aynı çıkış yılına sahip sanatçılar arasında isimlerine göre alfabetik sıralama yapar.
+     * 'ToList' yöntemi, sıralanan verileri listeye dönüştürür.
+    */
+    var singersBefore2000Pop = singers.Where(s => s.DebutYear < 2000 && s.MusicGenre.Contains("Pop"))
+                                      .OrderBy(s => s.DebutYear)
+                                      .ThenBy(s => s.NameSurname)
+                                      .ToList();
+    singersBefore2000Pop.ForEach(singers => Console.WriteLine(singers));
+
+
+    // En Çok albüm satan sanatçı
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\r\n----- En Çok Albüm Satan Sanatçı -----");
+    Console.ResetColor();
+    // 'OrderByDescending' yöntemi, albüm satışlarını azalan sırada sıralar ve en yüksek satışa sahip sanatçıyı bulur.
+    // 'FirstOrDefault', liste boşsa null döner.
+    var topSellingSinger = singers.OrderByDescending(s => s.AlbumSales).FirstOrDefault();
+    Console.WriteLine($"En Çok Albüm Satan Sanatçı : {topSellingSinger}");
+
+
+    // En yeni çıkış yapan şarkıcı ve en eski çıkış yapan şarkıcı
+    Console.ForegroundColor = ConsoleColor.Green;
+    Console.WriteLine("\r\n----- En Yeni ve En Eski Sanatçı -----");
+    Console.ResetColor();
+    // 'OrderByDescending' yöntemi, çıkış yılını azalan sırada sıralar ve en yeni sanatçıyı bulur.
+    // 'OrderBy' yöntemi, çıkış yılını artan sırada sıralar ve en eski sanatçıyı bulur.
+    var newestSinger = singers.OrderByDescending(s => s.DebutYear).First();
+    var oldestSinger = singers.OrderBy(s => s.DebutYear).FirstOrDefault();
+    Console.WriteLine($"En Yeni Çıkış Yapan Şarkıcı: {newestSinger}");
+    Console.WriteLine($"En Eski Çıkış Yapan Şarkıcı: {oldestSinger}");
+
+
+    Console.ReadKey();
 }
 ```
-Burada .ToList() kullanarak yeni liste oluşturdum ve filtrelenen verileri ForEach methodu ile yazdırdım
+
 
 
 
